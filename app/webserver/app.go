@@ -46,6 +46,7 @@ func NewServer(timer *TimerApp, task *TaskApp, confProvider *conf.WebServerAppCo
 	s.RegisterMockRouter()
 	s.RegisterTimerRouter()
 	s.RegisterTaskRouter()
+	s.RegisterUserRouter()
 	s.RegisterMonitorRouter()
 	return &s
 }
@@ -81,7 +82,8 @@ func (s *Server) RegisterTimerRouter() {
 }
 
 func (s *Server) RegisterUserRouter() {
-	s.userRouter.POST("/signup")
+	s.userRouter.POST("/signup", s.userApp.SignUp)
+	s.userRouter.POST("/login", s.userApp.Login)
 }
 
 func (s *Server) RegisterTaskRouter() {
