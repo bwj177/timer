@@ -10,6 +10,7 @@ import (
 	"github.com/xiaoxuxiansheng/xtimer/common/conf"
 	taskdao "github.com/xiaoxuxiansheng/xtimer/dao/task"
 	timerdao "github.com/xiaoxuxiansheng/xtimer/dao/timer"
+	userdao "github.com/xiaoxuxiansheng/xtimer/dao/user"
 	"github.com/xiaoxuxiansheng/xtimer/pkg/bloom"
 	"github.com/xiaoxuxiansheng/xtimer/pkg/cron"
 	"github.com/xiaoxuxiansheng/xtimer/pkg/hash"
@@ -62,6 +63,7 @@ func providePKG(c *dig.Container) {
 func provideDAO(c *dig.Container) {
 	c.Provide(timerdao.NewTimerDAO)
 	c.Provide(taskdao.NewTaskDAO)
+	c.Provide(userdao.NewUserDAO)
 	c.Provide(taskdao.NewTaskCache)
 }
 
@@ -70,6 +72,7 @@ func provideService(c *dig.Container) {
 	c.Provide(migratorservice.NewWorker)
 	c.Provide(webservice.NewTaskService)
 	c.Provide(webservice.NewTimerService)
+	c.Provide(webservice.NewUserService)
 	c.Provide(executorservice.NewTimerService)
 	c.Provide(executorservice.NewWorker)
 	c.Provide(triggerservice.NewWorker)
@@ -82,6 +85,7 @@ func provideApp(c *dig.Container) {
 	c.Provide(migrator.NewMigratorApp)
 	c.Provide(webserver.NewTaskApp)
 	c.Provide(webserver.NewTimerApp)
+	c.Provide(webserver.NewUserApp)
 	c.Provide(webserver.NewServer)
 	c.Provide(scheduler.NewWorkerApp)
 	c.Provide(monitor.NewMonitorApp)

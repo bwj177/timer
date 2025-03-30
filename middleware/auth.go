@@ -5,6 +5,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/xiaoxuxiansheng/xtimer/common/model/vo"
 	"github.com/xiaoxuxiansheng/xtimer/pkg/jwt"
+	"github.com/xiaoxuxiansheng/xtimer/pkg/log"
 	"net/http"
 	"strings"
 )
@@ -17,7 +18,7 @@ func JWTAuthMiddleware() func(c *gin.Context) {
 		// Authorization: Bearer xxxxxxx.xxx.xxx  / X-TOKEN: xxx.xxx.xx
 		// 这里的具体实现方式要依据你的实际业务情况决定
 		authHeader := c.Request.Header.Get("Authorization")
-
+		log.Infof("token: %v", authHeader)
 		if authHeader == "" {
 			c.JSON(http.StatusForbidden, vo.NewCodeMsg(-1, fmt.Sprintf("not auth")))
 			c.Abort()
@@ -27,14 +28,15 @@ func JWTAuthMiddleware() func(c *gin.Context) {
 		// 按空格分割
 		parts := strings.SplitN(authHeader, " ", 2)
 		if !(len(parts) == 2 && parts[0] == "Bearer") {
-			c.JSON(http.StatusForbidden, vo.NewCodeMsg(-1, fmt.Sprintf("auth invalid")))
+			c.JSON(http.StatusForbidden, vo.NewCodeMsg(-1, fmt.Sprintf("auth invalid all")))
 			c.Abort()
 			return
 		}
 		// parts[1]是获取到的tokenString，我们使用之前定义好的解析JWT的函数来解析它
 		mc, err := jwt.ParseToken(parts[1])
 		if err != nil {
-			c.JSON(http.StatusForbidden, vo.NewCodeMsg(-1, fmt.Sprintf("auth invalid")))
+			log.Errorf("parse token failed,err:%v", err.Error())
+			c.JSON(http.StatusForbidden, vo.NewCodeMsg(-1, fmt.Sprintf("auth invalid header")))
 			c.Abort()
 			return
 		}

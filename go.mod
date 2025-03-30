@@ -8,6 +8,7 @@ require (
 	github.com/gin-gonic/gin v1.8.1
 	github.com/go-sql-driver/mysql v1.6.0
 	github.com/gomodule/redigo v1.8.9
+	github.com/google/martian v2.1.0+incompatible
 	github.com/gorhill/cronexpr v0.0.0-20180427100037-88b0669f7d75
 	github.com/panjf2000/ants/v2 v2.6.0
 	github.com/prometheus/client_golang v1.14.0

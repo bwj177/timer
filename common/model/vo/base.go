@@ -23,6 +23,10 @@ func NewCodeMsgWithErr(err error) CodeMsg {
 	return CodeMsg{Err: err}
 }
 
+func NewCodeMsgWithMsg(msg string) CodeMsg {
+	return CodeMsg{Msg: msg}
+}
+
 type CodeMsg struct {
 	Code int32  `json:"code"`
 	Msg  string `json:"msg"`

@@ -29,11 +29,12 @@ type Server struct {
 	confProvider *conf.WebServerAppConfProvider
 }
 
-func NewServer(timer *TimerApp, task *TaskApp, confProvider *conf.WebServerAppConfProvider) *Server {
+func NewServer(timer *TimerApp, task *TaskApp, user *UserApp, confProvider *conf.WebServerAppConfProvider) *Server {
 	s := Server{
 		engine:       gin.Default(),
 		timerApp:     timer,
 		taskApp:      task,
+		userApp:      user,
 		confProvider: confProvider,
 	}
 
@@ -44,9 +45,9 @@ func NewServer(timer *TimerApp, task *TaskApp, confProvider *conf.WebServerAppCo
 	s.userRouter = s.engine.Group("api/user/v1")
 	s.RegisterBaseRouter()
 	s.RegisterMockRouter()
+	s.RegisterUserRouter()
 	s.RegisterTimerRouter()
 	s.RegisterTaskRouter()
-	s.RegisterUserRouter()
 	s.RegisterMonitorRouter()
 	return &s
 }

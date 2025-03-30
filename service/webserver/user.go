@@ -34,6 +34,9 @@ func (t *UserService) Login(ctx context.Context, req *vo.LoginReq) (string, erro
 	if len(user) == 0 {
 		return "", errors.New("用户不存在/密码错误")
 	}
+	if user[0].Password != req.Password {
+		return "", errors.New("用户不存在/密码错误")
+	}
 
 	// 生成JWT
 	token, err := jwt.GenToken(int64(user[0].ID), user[0].UserName)

@@ -10,7 +10,7 @@ type UserDAO struct {
 	client *mysql.Client
 }
 
-func NewTaskDAO(client *mysql.Client) *UserDAO {
+func NewUserDAO(client *mysql.Client) *UserDAO {
 	return &UserDAO{
 		client: client,
 	}

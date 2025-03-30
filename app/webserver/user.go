@@ -25,7 +25,10 @@ func (t *UserApp) SignUp(c *gin.Context) {
 	}
 
 	err := t.service.SignUp(c.Request.Context(), &req)
-	c.JSON(http.StatusOK, vo.NewSignUpResp(vo.NewCodeMsgWithErr(err)))
+	if err != nil {
+		c.JSON(http.StatusOK, vo.NewSignUpResp(vo.NewCodeMsg(-1, err.Error())))
+	}
+	c.JSON(http.StatusOK, vo.NewSignUpResp(vo.NewCodeMsgWithMsg("注册成功")))
 }
 
 func (t *UserApp) Login(c *gin.Context) {
@@ -36,7 +39,11 @@ func (t *UserApp) Login(c *gin.Context) {
 	}
 
 	token, err := t.service.Login(c.Request.Context(), &req)
-	c.JSON(http.StatusOK, vo.NewSignUpResp(token, vo.NewCodeMsgWithErr(err)))
+	if err != nil || token == "" {
+		c.JSON(http.StatusOK, vo.NewCodeMsg(-1, "密码错误，请重试"))
+		return
+	}
+	c.JSON(http.StatusOK, vo.NewLoginResp(token, vo.NewCodeMsgWithMsg("登录成功")))
 }
 
 type userService interface {
