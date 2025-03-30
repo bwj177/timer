@@ -6,6 +6,7 @@ import (
 	po2 "github.com/xiaoxuxiansheng/xtimer/common/model/po"
 	"github.com/xiaoxuxiansheng/xtimer/common/model/vo"
 	dao "github.com/xiaoxuxiansheng/xtimer/dao/user"
+	"github.com/xiaoxuxiansheng/xtimer/pkg/jwt"
 )
 
 type UserService struct {
@@ -25,13 +26,19 @@ func (t *UserService) SignUp(ctx context.Context, req *vo.SignUpReq) error {
 	return nil
 }
 
-func (t *UserService) Login(ctx context.Context, req *vo.LoginReq) error {
+func (t *UserService) Login(ctx context.Context, req *vo.LoginReq) (string, error) {
 	user, err := t.dao.GetUser(ctx, dao.WithUserName(req.UserName))
 	if err != nil {
-		return err
+		return "", err
 	}
 	if len(user) == 0 {
-		return errors.New("用户不存在/密码错误")
+		return "", errors.New("用户不存在/密码错误")
 	}
-	return nil
+
+	// 生成JWT
+	token, err := jwt.GenToken(int64(user[0].ID), user[0].UserName)
+	if err != nil {
+		return "", err
+	}
+	return token, nil
 }

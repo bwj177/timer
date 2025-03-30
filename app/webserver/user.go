@@ -35,11 +35,11 @@ func (t *UserApp) Login(c *gin.Context) {
 		return
 	}
 
-	err := t.service.Login(c.Request.Context(), &req)
-	c.JSON(http.StatusOK, vo.NewSignUpResp(vo.NewCodeMsgWithErr(err)))
+	token, err := t.service.Login(c.Request.Context(), &req)
+	c.JSON(http.StatusOK, vo.NewSignUpResp(token, vo.NewCodeMsgWithErr(err)))
 }
 
 type userService interface {
 	SignUp(ctx context.Context, req *vo.SignUpReq) error
-	Login(ctx context.Context, req *vo.LoginReq) error
+	Login(ctx context.Context, req *vo.LoginReq) (string, error)
 }

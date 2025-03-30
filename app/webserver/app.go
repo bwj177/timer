@@ -2,6 +2,7 @@ package webserver
 
 import (
 	"fmt"
+	"github.com/xiaoxuxiansheng/xtimer/middleware"
 	"net/http"
 	"sync"
 
@@ -37,7 +38,6 @@ func NewServer(timer *TimerApp, task *TaskApp, confProvider *conf.WebServerAppCo
 	}
 
 	s.engine.Use(CrosHandler())
-
 	s.timerRouter = s.engine.Group("api/timer/v1")
 	s.taskRouter = s.engine.Group("api/task/v1")
 	s.mockRouter = s.engine.Group("api/mock/v1")
@@ -69,6 +69,7 @@ func (s *Server) RegisterBaseRouter() {
 }
 
 func (s *Server) RegisterTimerRouter() {
+	s.timerRouter.Use(middleware.JWTAuthMiddleware())
 	s.timerRouter.GET("/def", s.timerApp.GetTimer)
 	s.timerRouter.POST("/def", s.timerApp.CreateTimer)
 	s.timerRouter.DELETE("/def", s.timerApp.DeleteTimer)

@@ -22,11 +22,13 @@ type LoginReq struct {
 }
 
 type LoginResp struct {
+	Token string `form:"token" json:"token"`
 	CodeMsg
 }
 
-func NewLoginResp(codeMsg CodeMsg) *LoginResp {
+func NewLoginResp(token string, codeMsg CodeMsg) *LoginResp {
 	return &LoginResp{
+		Token:   token,
 		CodeMsg: codeMsg,
 	}
 }
